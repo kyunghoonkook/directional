@@ -1,6 +1,6 @@
 # 게시판 & 데이터 시각화 프로젝트
 
-이 프로젝트는 게시판 CRUD 기능과 데이터 시각화를 구현한 React 기반 웹 애플리케이션입니다.
+React와 TypeScript를 사용한 게시판 CRUD와 데이터 시각화 구현 과제입니다.
 
 ## 🚀 프로젝트 실행 방법
 
@@ -49,206 +49,384 @@ npm start
 
 ### 데이터 시각화
 - **recharts 2.x** - React 차트 라이브러리
-  - 바 차트, 도넛 차트
-  - 스택형 바 차트, 스택형 면적 차트
-  - 멀티라인 차트 (이중 Y축)
 
 ## 📋 주요 구현 기능
 
 ### 1. 게시판 기능
-
-#### ✅ CRUD (Create, Read, Update, Delete)
-- 게시글 작성, 조회, 수정, 삭제 기능 완벽 구현
-- 로그인한 사용자만 접근 가능
-
-#### ✅ 검색
-- 제목 및 본문 내용으로 게시글 검색
-- 여러 단어를 공백으로 구분하여 AND 검색 가능
-
-#### ✅ 페이지네이션
-- 커서 기반 페이징 (prevCursor/nextCursor)
-- 이전/다음 페이지 이동 기능
-
-#### ✅ 정렬
-- 작성일(createdAt) 또는 제목(title) 기준 정렬
-- 오름차순/내림차순 선택 가능
-
-#### ✅ 필터
-- 카테고리별 필터링 (공지사항, 질문답변, 자유게시판)
-- 전체 보기 옵션
-
-#### ✅ 금칙어 필터
-- "캄보디아", "프놈펜", "불법체류", "텔레그램" 포함 시 등록 불가
-- 제목과 본문에서 실시간 검증
-
-#### ✅ 기타 기능
-- 태그 추가/삭제 (최대 5개, 각 24자 이내)
-- 제목 최대 80자, 본문 최대 2000자 제한
-- 실시간 유효성 검사
+- CRUD (작성, 조회, 수정, 삭제)
+- 검색 (제목/본문)
+- 커서 기반 페이지네이션
+- 정렬 (작성일/제목, 오름차순/내림차순)
+- 카테고리 필터
+- 금칙어 필터
+- 태그 기능
 
 ### 2. 데이터 시각화
-
-#### ✅ 인기 커피 브랜드 분포
-- **바 차트**: 브랜드별 인기도를 막대 그래프로 표시
-- **도넛 차트**: 브랜드별 점유율을 도넛 차트로 표시
-
-#### ✅ 주간 무드 트렌드
-- **스택형 바 차트**: 주차별 감정 분포를 누적 막대로 표시
-- **스택형 면적 차트**: 주차별 감정 변화를 누적 면적으로 표시
-- X축: 주차, Y축: 백분율(%)
-- 행복, 피곤, 스트레스 항목을 누적 형태로 시각화
-
-#### ✅ 팀별 커피 소비량과 생산성
-- **멀티라인 차트**: 팀별 커피 섭취량에 따른 버그 수와 생산성 변화
-- X축: 커피 섭취량 (잔/일)
-- 왼쪽 Y축: 버그 수 (실선, 원형 마커)
-- 오른쪽 Y축: 생산성 점수 (점선, 사각형 마커)
-- 팀별로 동일한 색상 유지
-- 호버 시 상세 정보 표시
+- 바 차트 / 도넛 차트
+- 스택형 바 차트 / 스택형 면적 차트
+- 멀티라인 차트 (이중 Y축)
 
 ### 3. 인증 및 권한 관리
-
-#### ✅ JWT 기반 인증
-- 로그인 시 토큰 발급 및 로컬 스토리지 저장
-- axios 인터셉터를 통한 자동 토큰 첨부
-- 토큰 만료 시 자동 로그아웃 및 로그인 페이지 리다이렉트
-
-#### ✅ Private Route
-- 인증되지 않은 사용자는 로그인 페이지로 자동 리다이렉트
-- 로그인 상태 유지 (새로고침 시에도 유지)
+- JWT 기반 인증
+- Private Route
 
 ## 📁 프로젝트 구조
 
 ```
 src/
-├── api/                    # API 서비스 레이어
-│   ├── axios.ts           # axios 인스턴스 및 인터셉터
-│   ├── authApi.ts         # 인증 API
-│   ├── postApi.ts         # 게시글 API
-│   ├── chartApi.ts        # 차트 데이터 API
-│   └── index.ts
-├── components/            # 재사용 가능한 컴포넌트
-│   ├── common/           # 공통 컴포넌트
-│   │   ├── Button.tsx
-│   │   ├── Input.tsx
-│   │   ├── Textarea.tsx
-│   │   ├── Select.tsx
-│   │   └── Loading.tsx
-│   └── layout/           # 레이아웃 컴포넌트
-│       ├── Layout.tsx
-│       ├── Navigation.tsx
-│       └── PrivateRoute.tsx
-├── contexts/             # Context API
-│   └── AuthContext.tsx   # 인증 상태 관리
-├── hooks/                # 커스텀 훅
-│   ├── usePostQueries.ts # 게시글 React Query 훅
-│   └── useChartQueries.ts # 차트 데이터 React Query 훅
-├── pages/                # 페이지 컴포넌트
-│   ├── auth/
-│   │   └── LoginPage.tsx
-│   ├── posts/
-│   │   ├── PostListPage.tsx
-│   │   ├── PostDetailPage.tsx
-│   │   └── PostFormPage.tsx
-│   └── visualization/
-│       ├── VisualizationPage.tsx
-│       └── components/
-│           ├── CoffeeBrandsCharts.tsx
-│           ├── WeeklyMoodCharts.tsx
-│           └── CoffeeConsumptionChart.tsx
-├── styles/               # 전역 스타일
-│   ├── GlobalStyle.ts    # 전역 스타일
-│   └── theme.ts          # 테마 정의
-├── types/                # TypeScript 타입 정의
-│   └── api.ts
-├── utils/                # 유틸리티 함수
-│   ├── constants.ts      # 상수
-│   ├── storage.ts        # 로컬 스토리지 관리
-│   └── validation.ts     # 유효성 검사
-├── App.tsx               # 루트 컴포넌트
-└── index.tsx             # 진입점
+├── api/              # API 서비스 (axios 설정, 인증/게시글/차트 API)
+├── components/       # 재사용 컴포넌트 (Button, Input 등)
+├── contexts/         # Context API (인증 상태)
+├── hooks/           # 커스텀 훅 (React Query)
+├── pages/           # 페이지 (로그인, 게시판, 시각화)
+├── styles/          # 전역 스타일 및 테마
+├── types/           # TypeScript 타입 정의
+└── utils/           # 유틸리티 (상수, 검증, 스토리지)
 ```
 
-## 💡 주요 설계 특징
+---
 
-### 1. 계층화된 아키텍처
-- API 레이어와 UI 레이어 분리
-- 서비스 레이어에서 중앙화된 에러 처리
-- 타입 안정성을 위한 TypeScript 전면 도입
+## 🧩 구현 과정 메모
 
-### 2. 상태 관리 전략
-- **전역 상태**: Context API (인증)
-- **서버 상태**: React Query (캐싱, 리페칭, 낙관적 업데이트)
-- **로컬 상태**: useState (폼 입력)
+### 프로젝트 초기 설정
 
-### 3. 에러 처리
-- axios 인터셉터에서 중앙화된 에러 처리
-- HTTP 상태 코드별 한글 에러 메시지 제공
-- 사용자 친화적인 에러 표시
+- **CRA로 TypeScript 프로젝트 생성** ⭕
+  
+  처음에는 Vite를 쓸까 고민했는데, 요구사항이 CRA였어서 CRA로 진행했다.
+  폴더 이름에 대문자가 들어가서 npm naming 에러가 발생해서 임시 폴더에 생성 후 파일을 옮기는 방식으로 해결했다.
 
-### 4. UX 개선
-- 로딩 상태 표시
-- 에러 메시지 명확하게 표시
-- 모달을 통한 삭제 확인
-- 실시간 입력 검증 및 피드백
+- **프로젝트 폴더 구조 설계** ⭕
+  
+  계층화된 구조로 만들기 위해 api, components, contexts, hooks, pages, styles, types, utils로 나눴다.
+  특히 pages 폴더 안에는 auth, posts, visualization으로 기능별로 분리해서 관리하기 쉽게 구성했다.
 
-### 5. 코드 재사용성
-- 공통 컴포넌트 분리 (Button, Input, Textarea, Select)
-- 커스텀 훅을 통한 로직 재사용
-- styled-components를 통한 스타일 재사용
+### API 및 상태 관리 구현
 
-## 🎨 디자인 컨셉
+- **axios 인스턴스 설정 및 인터셉터 구현** ⭕
+  
+  인터셉터를 사용해서 모든 요청에 자동으로 JWT 토큰을 헤더에 추가하도록 했다.
+  에러 처리도 한 곳에서 관리하려고 응답 인터셉터에 HTTP 상태 코드별로 한글 에러 메시지를 반환하게 구현했다.
+  401 에러가 발생하면 자동으로 로그아웃하고 로그인 페이지로 리다이렉트되도록 처리했다.
 
-- 깔끔하고 모던한 UI
-- 직관적인 네비게이션
-- 반응형 디자인 (모바일 지원)
-- 일관된 색상 체계
-- 카테고리별 색상 구분 (공지사항: 빨강, Q&A: 파랑, 자유게시판: 초록)
+  ```typescript
+  axiosInstance.interceptors.request.use(
+    (config) => {
+      const token = getToken();
+      if (token && config.headers) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+      return config;
+    }
+  );
+  ```
 
-## 📝 API 명세
+- **Context API로 인증 상태 관리** ⭕
+  
+  전역 인증 상태를 관리하기 위해 Context API를 사용했다.
+  로컬 스토리지에 토큰과 사용자 정보를 저장해서 새로고침해도 로그인 상태가 유지되도록 구현했다.
+  처음에는 useEffect에서 로컬 스토리지를 읽어올 때 타이밍 이슈가 있었는데, isLoading 상태를 추가해서 해결했다.
 
-프로젝트는 다음 API를 사용합니다:
-- Base URL: https://fe-hiring-rest-api.vercel.app
-- Swagger 문서: https://fe-hiring-rest-api.vercel.app/docs
+- **React Query 설정 및 커스텀 훅** ⭕
+  
+  서버 상태 관리를 위해 React Query를 도입했다.
+  Query Keys를 계층적으로 관리해서 캐시 무효화를 효율적으로 할 수 있게 구성했다.
+  
+  ```typescript
+  export const postKeys = {
+    all: ['posts'] as const,
+    lists: () => [...postKeys.all, 'list'] as const,
+    list: (params?: PostListParams) => [...postKeys.lists(), params] as const,
+    details: () => [...postKeys.all, 'detail'] as const,
+    detail: (id: string) => [...postKeys.details(), id] as const,
+  };
+  ```
 
-### 주요 엔드포인트
-- `POST /auth/login` - 로그인
-- `GET /posts` - 게시글 목록 조회
-- `POST /posts` - 게시글 작성
-- `GET /posts/:id` - 게시글 상세 조회
-- `PATCH /posts/:id` - 게시글 수정
-- `DELETE /posts/:id` - 게시글 삭제
-- `GET /mock/top-coffee-brands` - 커피 브랜드 데이터
-- `GET /mock/weekly-mood-trend` - 주간 무드 트렌드 데이터
-- `GET /mock/coffee-consumption` - 커피 소비 데이터
+### 게시판 구현
 
-## 🔒 보안
+- **게시글 목록 페이지 - 검색, 필터, 정렬** ⭕
+  
+  커서 기반 페이지네이션을 처음 구현해봤는데, 일반 offset 페이지네이션보다 복잡했다.
+  prevCursor와 nextCursor를 상태로 관리하고, 검색이나 필터 변경 시 커서를 초기화해야 했다.
+  
+  검색어 입력마다 API 호출하는 게 비효율적일 것 같아서 debounce를 적용하려 했는데, 
+  요구사항에 없어서 일단 그대로 뒀다.
 
-- JWT 토큰 기반 인증
-- 로컬 스토리지에 토큰 저장
-- Private Route를 통한 페이지 접근 제어
-- axios 인터셉터를 통한 자동 토큰 관리
-- 401 에러 시 자동 로그아웃
+- **금칙어 필터 구현** ⭕
+  
+  금칙어 체크 함수를 utils에 만들어서 재사용할 수 있게 했다.
+  제목과 본문 둘 다 체크하고, 어떤 금칙어가 포함됐는지 정확히 알려주도록 구현했다.
+  
+  ```typescript
+  export const checkForbiddenWords = (text: string): string | null => {
+    const lowerText = text.toLowerCase();
+    for (const word of FORBIDDEN_WORDS) {
+      if (lowerText.includes(word.toLowerCase())) {
+        return word;
+      }
+    }
+    return null;
+  };
+  ```
 
-## 📱 브라우저 지원
+- **태그 입력 UI** ⭕
+  
+  태그를 입력하고 Enter를 누르면 추가되도록 onKeyPress 이벤트를 사용했다.
+  처음에는 Input 컴포넌트에 onKeyPress props가 없어서 타입 에러가 났는데, 
+  인터페이스에 추가해서 해결했다.
+  
+  중복 태그 체크, 최대 5개 제한, 24자 제한 등 여러 검증 로직이 들어가다 보니 
+  코드가 좀 길어졌는데, 나중에 커스텀 훅으로 분리하면 좋을 것 같다.
 
-- Chrome (최신 버전)
-- Firefox (최신 버전)
-- Safari (최신 버전)
-- Edge (최신 버전)
+### 데이터 시각화 구현
 
-## 🐛 알려진 이슈
+- **Recharts 라이브러리 선택** ⭕
+  
+  차트 라이브러리로 Recharts를 선택한 이유는 React 친화적이고 사용법이 직관적이기 때문이다.
+  TypeScript 타입 지원도 잘 되어 있어서 개발 경험이 좋았다.
 
-없음
+- **바 차트 / 도넛 차트** ⭕
+  
+  TopCoffeeBrands API에서 받은 데이터를 바 차트와 도넛 차트 두 가지로 표현했다.
+  도넛 차트의 innerRadius를 설정해서 중앙이 비어있는 모양으로 만들었다.
+  
+  처음에 TypeScript 타입 에러가 났는데, Recharts의 타입 정의가 엄격해서 `as any`로 우회했다.
+  실무에서는 이렇게 하면 안 되겠지만, 시간 관계상 일단 진행했다.
 
-## 🔮 향후 개선 사항
+- **스택형 바 차트 / 스택형 면적 차트** ⭕
+  
+  주간 무드 트렌드 데이터를 누적(Stack) 형태로 표현했다.
+  Bar 컴포넌트에 stackId를 동일하게 주면 자동으로 쌓이는 게 신기했다.
+  
+  백분율로 표시하기 위해 Y축에 label을 추가하고, 각 감정별로 색상을 다르게 지정했다.
 
-- 다크 모드 지원
-- 게시글 좋아요/댓글 기능
-- 이미지 업로드 기능
-- 무한 스크롤 페이지네이션
-- 검색어 자동완성
-- 모바일 최적화 개선
+- **멀티라인 차트 (이중 Y축)** ⭕
+  
+  이 부분이 가장 까다로웠다. 요구사항이 복잡했는데:
+  - 왼쪽 Y축: 버그 수 (실선, 원형 마커)
+  - 오른쪽 Y축: 생산성 (점선, 사각형 마커)
+  - 같은 팀은 같은 색상
+  - 호버 시 해당 커피 잔수의 모든 팀 데이터 표시
+  
+  데이터 구조를 변환하는 부분에서 시간이 좀 걸렸다.
+  각 팀의 series를 하나의 배열로 병합해야 했는데, cups 값을 기준으로 재구성했다.
+  
+  ```typescript
+  const chartData = data.teams[0].series.map((_, index) => {
+    const point: any = { cups: index + 1 };
+    data.teams.forEach((team) => {
+      point[`${team.team} - 버그`] = team.series[index].bugs;
+      point[`${team.team} - 생산성`] = team.series[index].productivity;
+    });
+    return point;
+  });
+  ```
+  
+  커스텀 툴팁을 만들어서 호버 시 깔끔하게 정보를 표시하도록 했다.
+  사각형 마커를 만들려고 했는데 Recharts에서 shape prop을 지원하지 않아서 그냥 원형으로 통일했다.
+
+### 스타일링
+
+- **styled-components 테마 설정** ⭕
+  
+  전역 테마를 만들어서 색상, 그림자, border-radius 등을 일관되게 관리했다.
+  카테고리별 색상(공지사항: 빨강, Q&A: 파랑, 자유게시판: 초록)도 테마에 정의해서 재사용했다.
+  
+  처음에 TypeScript에서 테마 타입 에러가 났는데, styled.d.ts 파일을 만들어서 
+  DefaultTheme 인터페이스를 확장해서 해결했다.
+
+- **공통 컴포넌트 제작** ⭕
+  
+  Button, Input, Textarea, Select, Loading 등 재사용 가능한 컴포넌트를 만들었다.
+  각 컴포넌트마다 error, disabled 등의 상태를 props로 받아서 처리하도록 구현했다.
+
+### 라우팅 및 권한 관리
+
+- **Private Route 구현** ⭕
+  
+  인증되지 않은 사용자가 보호된 페이지에 접근하면 로그인 페이지로 리다이렉트하도록 했다.
+  isLoading 상태를 확인해서 로그인 상태를 확인하는 동안 로딩 화면을 보여주도록 구현했다.
+
+---
+
+## ⛏ 구현 중 겪었던 주요 이슈
+
+### TypeScript 타입 에러 해결
+
+**문제점**
+
+빌드 시 styled-components의 theme 관련 타입 에러가 대량으로 발생했다.
+```
+Property 'colors' does not exist on type 'DefaultTheme'.
+```
+
+**시도한 방법**
+1. inline으로 theme 객체를 직접 참조 → 가독성이 너무 떨어짐
+2. 타입 단언 사용 → 근본적인 해결이 아님
+3. styled.d.ts 파일 생성하여 DefaultTheme 확장 → 해결!
+
+**해결 방법**
+
+styled-components의 DefaultTheme 인터페이스를 확장하는 타입 정의 파일을 생성했다.
+
+```typescript
+// src/styles/styled.d.ts
+import 'styled-components';
+
+declare module 'styled-components' {
+  export interface DefaultTheme {
+    colors: {
+      primary: string;
+      // ... 기타 색상들
+    };
+    shadows: { ... };
+    borderRadius: { ... };
+  }
+}
+```
+
+### Recharts 타입 이슈
+
+**문제점**
+
+TopCoffeeBrandsResponse 타입이 Recharts의 ChartDataInput[] 타입과 호환되지 않았다.
+```
+Type 'TopCoffeeBrandsResponse' is not assignable to type 'ChartDataInput[]'.
+```
+
+**해결 방법**
+
+Recharts 타입 정의가 굉장히 엄격해서 `as any`로 타입 단언을 사용했다.
+실무에서는 좋은 방법은 아니지만, 과제 제출 시간이 촉박해서 우선 진행했다.
+
+```typescript
+<BarChart data={data as any}>
+```
+
+### 커서 기반 페이지네이션 구현
+
+**문제점**
+
+처음 커서 기반 페이지네이션을 구현해보는 거라 어떻게 상태를 관리해야 할지 막막했다.
+검색이나 필터를 바꿀 때 커서를 초기화해야 하는데, 이 부분을 놓쳐서 버그가 발생했다.
+
+**해결 방법**
+
+검색어나 필터가 변경될 때마다 nextCursor와 prevCursor를 undefined로 초기화하도록 했다.
+
+```typescript
+const handleCategoryChange = (category: string) => {
+  setParams((prev) => ({
+    ...prev,
+    category: category === 'ALL' ? undefined : (category as Category),
+    nextCursor: undefined,  // 커서 초기화
+    prevCursor: undefined,
+  }));
+};
+```
+
+### Input 컴포넌트에 onKeyPress 추가
+
+**문제점**
+
+태그 입력 시 Enter로 추가하는 기능을 만들려고 했는데, Input 컴포넌트에 onKeyPress props가 없어서 에러가 발생했다.
+
+**해결 방법**
+
+InputProps 인터페이스에 onKeyPress를 선택적(optional) prop으로 추가했다.
+
+```typescript
+interface InputProps {
+  // ... 기존 props들
+  onKeyPress?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+}
+```
+
+---
+
+## 🛠 개발하면서 느낀 점
+
+### 타입스크립트의 중요성
+
+처음에는 타입 에러 때문에 시간이 많이 걸렸는데, 나중에는 오히려 타입스크립트 덕분에 
+버그를 사전에 많이 잡을 수 있었다. 특히 API 응답 타입을 정확히 정의해두니 
+자동완성도 잘 되고 실수할 여지가 줄어들었다.
+
+### React Query의 강력함
+
+서버 상태 관리를 React Query로 하니까 캐싱, 리페칭, 에러 처리 등이 너무 편했다.
+특히 mutation 후 자동으로 쿼리를 무효화시키는 기능이 정말 유용했다.
+
+```typescript
+const createMutation = useCreatePostMutation();
+
+// mutation 성공 시 자동으로 목록 쿼리 무효화
+onSuccess: () => {
+  queryClient.invalidateQueries({ queryKey: postKeys.lists() });
+}
+```
+
+### 컴포넌트 설계의 중요성
+
+처음에는 급하게 만들다 보니 컴포넌트가 너무 커졌는데, 
+나중에 재사용하려고 보니 결합도가 높아서 분리하기 힘들었다.
+처음부터 작은 단위로 나누고, 각 컴포넌트가 하나의 책임만 갖도록 설계하는 게 중요하다는 걸 느꼈다.
+
+---
+
+## 💊 추가로 개선하고 싶은 부분
+
+### 1. 테스트 코드 작성
+
+시간 관계상 테스트 코드를 작성하지 못했는데, 실무에서는 필수라고 생각한다.
+특히 유틸리티 함수(금칙어 체크, 유효성 검사 등)는 테스트하기 좋은 순수 함수들이라 
+Jest로 단위 테스트를 작성하면 좋을 것 같다.
+
+### 2. 에러 바운더리 추가
+
+현재는 각 컴포넌트에서 에러를 처리하고 있는데, 
+예상치 못한 에러를 잡아내기 위해 Error Boundary를 추가하면 좋겠다.
+
+### 3. 성능 최적화
+
+- 검색어 입력 시 debounce 적용
+- React.memo를 활용한 불필요한 리렌더링 방지
+- 이미지 lazy loading
+- 코드 스플리팅
+
+### 4. 접근성 개선
+
+- 키보드 네비게이션 지원
+- ARIA 속성 추가
+- 스크린 리더 대응
+
+### 5. 반응형 디자인 강화
+
+현재는 기본적인 반응형만 구현했는데, 
+모바일 환경에서 더 최적화된 UI를 제공하면 좋겠다.
+
+### 6. 차트 인터랙션 강화
+
+- 차트 줌인/줌아웃 기능
+- 데이터 포인트 클릭 시 상세 정보 표시
+- 범례 클릭으로 데이터 시리즈 토글
+
+---
+
+## 📝 배운 점 정리
+
+### 기술적인 부분
+
+1. **커서 기반 페이지네이션**: offset 방식보다 구현이 복잡하지만, 대용량 데이터에서는 더 효율적이라는 걸 알게 됨
+2. **React Query의 강력함**: 서버 상태 관리가 이렇게 편할 수 있다는 걸 체감
+3. **TypeScript의 장점**: 처음엔 불편했지만, 타입 안정성 덕분에 런타임 에러가 많이 줄어듦
+4. **styled-components 테마**: 테마를 잘 설계하면 일관된 디자인 시스템을 유지하기 쉬움
+
+### 설계적인 부분
+
+1. **계층화의 중요성**: API, 컴포넌트, 페이지를 명확히 분리하니 유지보수가 쉬워짐
+2. **재사용 가능한 컴포넌트**: 처음부터 재사용을 고려해서 설계하는 게 중요
+3. **중앙화된 에러 처리**: axios 인터셉터로 한 곳에서 에러를 관리하니 코드가 깔끔해짐
+4. **타입 정의의 중요성**: API 응답 타입을 명확히 정의하면 개발 경험이 훨씬 좋아짐
 
 ---
 
